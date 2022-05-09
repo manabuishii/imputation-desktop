@@ -1,0 +1,10 @@
+[
+    {
+      "workflow_name": "beagle",
+      "workflow_url": "file:///usr/local/sapporo/imputation-server/src/imputation-server-jp/Workflows/beagle-imputation-scatter-region.cwl",
+      "workflow_type": "CWL",
+      "workflow_type_version": "v1.0",
+      "workflow_attachment": []
+    }
+  ]
+  

@@ -54,10 +54,31 @@ nohup python3 app.py &
 deactivate
 cd ..
 
+# sapporo-service
+git clone https://github.com/sapporo-wes/sapporo-service.git -b 1.0.16
+cd sapporo-service
+## setting files
+cp /scripts/executable_workflows.json sapporo/executable_workflows.json
+cp /scripts/uwsgi.yaml uwsgi.yaml
+##
+/usr/local/sapporo/python/py397/bin/python3 -m venv venv-sapporo-service
+source venv-sapporo-service/bin/activate
+pip install sapporo==1.0.16
+pip install cwltool==3.1.20210816212154
+nohup python3 sapporo/app.py --host=0.0.0.0 --run-sh sapporo/run.sh  --executable-workflows sapporo/executable_workflows.json &
+deactivate
+cd ..
+
+
+
+
 # sapporo-web
 git clone https://github.com/sapporo-wes/sapporo-web.git -b 1.0.10
 cd sapporo-web
 curl -o src/plugins/loadPreRegisteredServices.ts https://raw.githubusercontent.com/sapporo-wes/sapporo-web/d7be4a559ba3d431aef05a1f93d11254ba8083b8/src/plugins/loadPreRegisteredServices.ts
+# copy setting files
+cp /scripts/nuxt.config.ts nuxt.config.ts
+cp /scripts/preRegisteredServices.json src/assets/preRegisteredServices.json
 # TODO set readonly mode
 npm install yarn
 # export PATH=node_modules/.bin:$PATH
@@ -67,16 +88,4 @@ nohup node_modules/.bin/yarn start &
 
 # 
 cd ..
-
-# sapporo-service
-git clone https://github.com/sapporo-wes/sapporo-service.git -b 1.0.16
-cd sapporo-service
-/usr/local/sapporo/python/py397/bin/python3 -m venv venv-sapporo-service
-source venv-sapporo-service/bin/activate
-pip install sapporo==1.0.16
-pip install cwltool==3.1.20210816212154
-nohup python3 sapporo/app.py --host=0.0.0.0 &
-deactivate
-cd ..
-
 
