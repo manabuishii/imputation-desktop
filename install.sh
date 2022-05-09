@@ -1,12 +1,13 @@
 #!/bin/bash
 
-apt update
-apt install git build-essential libffi-dev libssl-dev libcurl4-openssl-dev zlib1g-dev -y
+sudo apt-get update
+sudo apt-get install git build-essential libffi-dev libssl-dev libcurl4-openssl-dev zlib1g-dev -y --no-install-recommends
 # pip install cwltool==3.1.20210816212154
-apt clean
-rm -rf /var/lib/apt/lists/*
+sudo apt-get clean
+sudo rm -rf /var/lib/apt/lists/*
 
-mkdir /usr/local/sapporo
+sudo mkdir /usr/local/sapporo
+sudo chmod 777 /usr/local/sapporo
 cd /usr/local/sapporo
 
 curl -O -L https://nodejs.org/dist/v14.17.6/node-v14.17.6-linux-x64.tar.xz
@@ -49,6 +50,8 @@ cd imputationserver-web-ui
 source venv-imputationserver-web-ui/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
+nohup python3 app.py &
+deactivate
 cd ..
 
 # sapporo-web
@@ -59,6 +62,8 @@ curl -o src/plugins/loadPreRegisteredServices.ts https://raw.githubusercontent.c
 npm install yarn
 # export PATH=node_modules/.bin:$PATH
 node_modules/.bin/yarn install --flozen-lock
+node_modules/.bin/yarn generate
+nohup node_modules/.bin/yarn start & 
 
 # 
 cd ..
@@ -70,6 +75,8 @@ cd sapporo-service
 source venv-sapporo-service/bin/activate
 pip install sapporo==1.0.16
 pip install cwltool==3.1.20210816212154
+nohup python3 sapporo/app.py --host=0.0.0.0 &
+deactivate
 cd ..
 
 
