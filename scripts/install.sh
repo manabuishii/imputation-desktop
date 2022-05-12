@@ -6,6 +6,7 @@ INSTALLPACKAGE=0
 #
 INSTALLDIR=$HOME/sapporo-install
 EXECUTABLEWORKFLOWSJSON_PATH=${INSTALLDIR}/imputation-desktop/scripts/executable_workflows.json
+RUNSH_PATH=${INSTALLDIR}/imputation-desktop/scripts/run.singularity.sh
 NUXTCONFIGTS_PATH=${INSTALLDIR}/imputation-desktop/scripts/nuxt.config.ts
 PREREGISTEREDSERVICES_PATH=${INSTALLDIR}/imputation-desktop/scripts/preRegisteredServices.json
 UWSGIYAML_PATH=${INSTALLDIR}/imputation-desktop/scripts/uwsgi.yaml
@@ -80,6 +81,7 @@ cd sapporo-service
 ## setting files
 #cp /home/manabu-pg/work/imputation-desktop/scripts/executable_workflows.json sapporo/executable_workflows.json
 cp ${EXECUTABLEWORKFLOWSJSON_PATH} sapporo/executable_workflows.json
+cp ${RUNSH_PATH} sapporo/run.sh
 # cp /home/manabu-pg/work/imputation-desktop/scripts/uwsgi.yaml uwsgi.yaml
 # cp ${UWSGIYAML_PATH} uwsgi.yaml
 ##
