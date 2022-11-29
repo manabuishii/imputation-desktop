@@ -43,6 +43,10 @@ make install
 
 cd ..
 
+# imputation desktop
+# for settting files
+git clone https://github.com/manabuishii/imputation-desktop.git
+
 # imputation server
 git clone https://github.com/ddbj/imputation-server-ui.git
 cd imputation-server-ui
@@ -55,10 +59,6 @@ deactivate
 cp ${STARTSTOPSCRIPTDIRECTORY_PATH}/start-imputation-server-ui.sh .
 cp ${STARTSTOPSCRIPTDIRECTORY_PATH}/stop-imputation-server-ui.sh .
 cd ..
-
-# imputation desktop
-# for settting files
-git clone https://github.com/manabuishii/imputation-desktop.git
 
 # sapporo-service
 git clone https://github.com/sapporo-wes/sapporo-service.git -b 1.0.16
