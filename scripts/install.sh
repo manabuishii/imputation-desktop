@@ -26,8 +26,6 @@ fi
 mkdir ${INSTALLDIR}
 chmod 777 ${INSTALLDIR}
 cd ${INSTALLDIR}
-cp ${STARTSTOPSCRIPTDIRECTORY_PATH}/startall.sh .
-cp ${STARTSTOPSCRIPTDIRECTORY_PATH}/stopall.sh .
 
 curl -O -L https://nodejs.org/dist/v14.17.6/node-v14.17.6-linux-x64.tar.xz
 xz -d node-v14.17.6-linux-x64.tar.xz
@@ -103,5 +101,7 @@ cp ${STARTSTOPSCRIPTDIRECTORY_PATH}/stop-sapporo-web.sh .
 # 
 cd ..
 # startall.sh
+cp ${STARTSTOPSCRIPTDIRECTORY_PATH}/startall.sh .
+cp ${STARTSTOPSCRIPTDIRECTORY_PATH}/stopall.sh .
 ./startall.sh
 
