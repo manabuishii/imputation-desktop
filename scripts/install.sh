@@ -61,8 +61,8 @@ make install
 cd ..
 
 # imputation server
-git clone https://github.com/manabuishii/imputationserver-web-ui.git
-cd imputationserver-web-ui
+git clone https://github.com/ddbj/imputation-server-ui.git
+cd imputation-server-ui
 ${INSTALLDIR}/python/py397/bin/python3 -m venv venv-imputationserver-web-ui
 source venv-imputationserver-web-ui/bin/activate
 pip install --upgrade pip
