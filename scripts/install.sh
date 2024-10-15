@@ -64,6 +64,10 @@ make install
 
 cd ..
 
+# imputation server wf
+git clone https://github.com/ddbj/imputation-server-wf.git
+## TODO: checkout suitable version
+
 # imputation desktop
 # for settting files
 git clone https://github.com/manabuishii/imputation-desktop.git
