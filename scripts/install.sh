@@ -22,6 +22,27 @@ if [ ${INSTALLPACKAGE} -eq 1 ]; then
     # pip install cwltool==3.1.20210816212154
 fi
 
+# check jq
+if ! command -v jq &> /dev/null; then
+  echo "jq is not installed. Installing jq..."
+
+  # create ~/bin
+  mkdir -p ~/bin
+
+  # install jq to ~/bin
+  curl -L -o ~/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
+  
+  # add execution permission jq
+  chmod +x ~/bin/jq
+  # export PATH=~/bin:$PATH
+  echo "jq has been installed to ~/bin."
+fi
+
+# add ~/bin to PATH in .bashrc
+if [[ ":$PATH:" != *":$HOME/bin:"* ]]; then
+  echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc
+  echo "Added ~/bin to PATH. Please run 'source ~/.bashrc' or open a new terminal."
+fi
 
 mkdir ${INSTALLDIR}
 chmod 777 ${INSTALLDIR}
