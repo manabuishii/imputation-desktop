@@ -4,6 +4,30 @@
 INSTALLPACKAGE=0
 
 #
+# Array for required packages
+REQUIRED_PACKAGES=("git" "build-essential" "libffi-dev" "libssl-dev" "libcurl4-openssl-dev" "zlib1g-dev")
+
+# Array for missing packages
+MISSING_PACKAGES=()
+
+# Check whether package is install or not
+for package in "${REQUIRED_PACKAGES[@]}"; do
+  if ! dpkg -l | grep -q "^ii  $package "; then
+    MISSING_PACKAGES+=("$package")
+  fi
+done
+
+# There are some packages not installed
+if [ ${#MISSING_PACKAGES[@]} -ne 0 ]; then
+  echo "Following packages are not installed:"
+  for package in "${MISSING_PACKAGES[@]}"; do
+    echo "$package"
+  done
+  exit 1
+fi
+# all paackages are installed
+
+#
 INSTALLDIR=$PWD/sapporo-install
 EXECUTABLEWORKFLOWSJSON_PATH=${INSTALLDIR}/executable_workflows.json
 RUNSH_PATH=${INSTALLDIR}/imputation-desktop/scripts/run.singularity.sh
