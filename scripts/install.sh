@@ -67,6 +67,10 @@ cd ..
 # imputation server wf
 git clone https://github.com/ddbj/imputation-server-wf.git
 ## TODO: checkout suitable version
+cd imputation-server-wf
+## checkout this version
+git checkout 9c15e7a4676c1a2dd2cf089f8ebe1a137624e8b7
+cd ..
 
 # imputation desktop
 # for settting files
@@ -75,6 +79,8 @@ git clone https://github.com/manabuishii/imputation-desktop.git
 # imputation server
 git clone https://github.com/ddbj/imputation-server-ui.git
 cd imputation-server-ui
+## checkout this version
+git checkout 013834df5cf9d415f15f913636a707fd961c657d
 # create dot env for secret key
 SECRET_KEY=$(tr -cd '[:alnum:][:punct:]' < /dev/urandom | tr -d '\\"`' | tr -d "'" |head -c 20)
 echo "IMPUTATION_SERVER_SECRET_KEY=${SECRET_KEY}" > .env
