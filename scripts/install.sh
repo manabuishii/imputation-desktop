@@ -50,6 +50,9 @@ git clone https://github.com/manabuishii/imputation-desktop.git
 # imputation server
 git clone https://github.com/ddbj/imputation-server-ui.git
 cd imputation-server-ui
+# create dot env for secret key
+tr -cd '[:alnum:][:punct:]' < /dev/urandom | tr -d '\\"`' | tr -d "'" |head -c 20 > .env
+
 ${INSTALLDIR}/python/py397/bin/python3 -m venv venv-imputationserver-web-ui
 source venv-imputationserver-web-ui/bin/activate
 pip install --upgrade pip
