@@ -12,7 +12,7 @@ MISSING_PACKAGES=()
 
 # Check whether package is install or not
 for package in "${REQUIRED_PACKAGES[@]}"; do
-  if ! dpkg -l | grep -q "^ii  $package "; then
+  if ! dpkg -l | grep -q "^ii  $package[ :]"; then
     MISSING_PACKAGES+=("$package")
   fi
 done
