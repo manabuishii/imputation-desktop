@@ -128,7 +128,7 @@ git clone https://github.com/manabuishii/imputation-desktop.git
 git clone https://github.com/ddbj/imputation-server-ui.git
 cd imputation-server-ui
 ## checkout this version
-git checkout faec011994406bae3ebf93c55e253ee0bd8400b1
+git checkout e63ca93a4fbe4f7cdfcde6e3c2f48ba4b3d34f0a
 # create dot env for secret key
 SECRET_KEY=$(tr -cd '[:alnum:][:punct:]' < /dev/urandom | tr -d '\\"`' | tr -d "'" |head -c 20)
 echo "IMPUTATION_SERVER_SECRET_KEY=${SECRET_KEY}" > .env
