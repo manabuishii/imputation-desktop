@@ -99,7 +99,7 @@ cd ..
 # create executable_workflows.json
 # 9c15e7a4676c1a2dd2cf089f8ebe1a137624e8b7
 BEAGLE_WORKFLOW_URL=https://raw.githubusercontent.com/ddbj/imputation-server-wf/9c15e7a4676c1a2dd2cf089f8ebe1a137624e8b7/Workflows/beagle-imputation-scatter-region.cwl
-HIBAG_WORKFLOW_URL=https://raw.githubusercontent.com/ddbj/imputation-server-wf/9c15e7a4676c1a2dd2cf089f8ebe1a137624e8b7/Workflows/hla-imputation/runhibag.cwl
+HIBAG_WORKFLOW_URL=https://raw.githubusercontent.com/ddbj/imputation-server-wf/9c15e7a4676c1a2dd2cf089f8ebe1a137624e8b7/Workflows/hla-imputation/filterChrom-runhibag.cwl
 
 if [ ! -f "${EXECUTABLEWORKFLOWSJSON_PATH}" ]; then
 cat <<EOF > ${EXECUTABLEWORKFLOWSJSON_PATH}
