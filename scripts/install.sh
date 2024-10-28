@@ -132,6 +132,8 @@ git checkout 86427bd66d856bfcf616c69bf415761e921e55e5
 # create dot env for secret key
 SECRET_KEY=$(tr -cd '[:alnum:][:punct:]' < /dev/urandom | tr -d '\\"`' | tr -d "'" |head -c 20)
 echo "IMPUTATION_SERVER_SECRET_KEY=${SECRET_KEY}" > .env
+# bcftools
+echo "BCFTOOLS_IMAGE_PATH=/usr/local/biotools/b/bcftools:1.21--h8b25389_0" >> .env
 
 ${INSTALLDIR}/python/py397/bin/python3 -m venv venv-imputationserver-web-ui
 source venv-imputationserver-web-ui/bin/activate
