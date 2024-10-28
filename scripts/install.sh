@@ -128,7 +128,7 @@ git clone https://github.com/manabuishii/imputation-desktop.git
 git clone https://github.com/ddbj/imputation-server-ui.git
 cd imputation-server-ui
 ## checkout this version
-git checkout e63ca93a4fbe4f7cdfcde6e3c2f48ba4b3d34f0a
+git checkout 86427bd66d856bfcf616c69bf415761e921e55e5
 # create dot env for secret key
 SECRET_KEY=$(tr -cd '[:alnum:][:punct:]' < /dev/urandom | tr -d '\\"`' | tr -d "'" |head -c 20)
 echo "IMPUTATION_SERVER_SECRET_KEY=${SECRET_KEY}" > .env
@@ -144,7 +144,7 @@ cp ${STARTSTOPSCRIPTDIRECTORY_PATH}/stop-imputation-server-ui.sh .
 cd ..
 
 # sapporo-service
-git clone https://github.com/sapporo-wes/sapporo-service.git -b 1.0.16
+git clone https://github.com/sapporo-wes/sapporo-service.git -b 2.0.5
 cd sapporo-service
 ## setting files
 cp ${EXECUTABLEWORKFLOWSJSON_PATH} sapporo/executable_workflows.json
@@ -157,7 +157,7 @@ source venv-sapporo-service/bin/activate
 # those libraries are required for uwsgi, but this time we do not use uwsgi.
 # So we install sapporo related libraries manually.
 ## Original: pip install --no-deps sapporo==1.0.16
-pip install --no-deps sapporo==1.0.16
+pip install --no-deps sapporo==2.0.5
 pip install requests Flask jsonschema
 pip install cwltool==3.1.20210816212154
 #nohup python3 sapporo/app.py --host=0.0.0.0 --run-sh sapporo/run.sh  --executable-workflows sapporo/executable_workflows.json &
