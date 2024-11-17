@@ -147,7 +147,7 @@ cp ${STARTSTOPSCRIPTDIRECTORY_PATH}/stop-imputation-server-ui.sh .
 cd ..
 
 # sapporo-service
-git clone https://github.com/sapporo-wes/sapporo-service.git -b 2.0.5
+git clone https://github.com/sapporo-wes/sapporo-service.git -b 1.0.16
 cd sapporo-service
 ## setting files
 cp ${EXECUTABLEWORKFLOWSJSON_PATH} sapporo/executable_workflows.json
@@ -160,7 +160,7 @@ source venv-sapporo-service/bin/activate
 # those libraries are required for uwsgi, but this time we do not use uwsgi.
 # So we install sapporo related libraries manually.
 ## Original: pip install --no-deps sapporo==1.0.16
-pip install --no-deps sapporo==2.0.5
+pip install --no-deps sapporo==1.0.16
 pip install requests Flask jsonschema
 pip install cwltool==3.1.20210816212154
 #nohup python3 sapporo/app.py --host=0.0.0.0 --run-sh sapporo/run.sh  --executable-workflows sapporo/executable_workflows.json &
