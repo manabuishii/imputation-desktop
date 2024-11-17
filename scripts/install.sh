@@ -98,22 +98,22 @@ cd ..
 
 # create executable_workflows.json
 # 9c15e7a4676c1a2dd2cf089f8ebe1a137624e8b7
-BEAGLE_WORKFLOW_URL=https://raw.githubusercontent.com/ddbj/imputation-server-wf/9c15e7a4676c1a2dd2cf089f8ebe1a137624e8b7/Workflows/beagle-imputation-scatter-region.cwl
-HIBAG_WORKFLOW_URL=https://raw.githubusercontent.com/ddbj/imputation-server-wf/9c15e7a4676c1a2dd2cf089f8ebe1a137624e8b7/Workflows/hla-imputation/filterChrom-runhibag.cwl
+BEAGLE_WORKFLOW_URL=$PWD/imputation-server-wf/Workflows/beagle-imputation-scatter-region.cwl
+HIBAG_WORKFLOW_URL=$PWD/imputation-server-wf/Workflows/hla-imputation/filterChrom-runhibag.cwl
 
 if [ ! -f "${EXECUTABLEWORKFLOWSJSON_PATH}" ]; then
 cat <<EOF > ${EXECUTABLEWORKFLOWSJSON_PATH}
 [
     {
       "workflow_name": "beagle",
-      "workflow_url": "${BEAGLE_WORKFLOW_URL}",
+      "workflow_url": "file://${BEAGLE_WORKFLOW_URL}",
       "workflow_type": "CWL",
       "workflow_type_version": "v1.0",
       "workflow_attachment": []
     },
     {
       "workflow_name": "hibag",
-      "workflow_url": "${HIBAG_WORKFLOW_URL}",
+      "workflow_url": "file://${HIBAG_WORKFLOW_URL}",
       "workflow_type": "CWL",
       "workflow_type_version": "v1.0",
       "workflow_attachment": []
