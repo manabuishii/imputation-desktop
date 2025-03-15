@@ -88,6 +88,11 @@ make install
 
 cd ..
 
+# nextflow
+curl -s https://get.nextflow.io | bash
+chmod 755 nextflow
+mkdir ${INSTALLDIR}/nextflow_singularity_cache
+
 # imputation server wf
 git clone https://github.com/ddbj/imputation-server-wf.git
 ## TODO: checkout suitable version
