@@ -136,7 +136,7 @@ EOF
 fi
 # imputation desktop
 # for settting files
-git clone https://github.com/manabuishii/imputation-desktop.git
+git clone -b add_pgs https://github.com/manabuishii/imputation-desktop.git
 
 # imputation server
 git clone https://github.com/manabuishii/imputation-server-ui.git
