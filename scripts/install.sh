@@ -4,8 +4,32 @@
 INSTALLPACKAGE=0
 
 #
+# Array for required packages
+REQUIRED_PACKAGES=("git" "build-essential" "libffi-dev" "libssl-dev" "libcurl4-openssl-dev" "zlib1g-dev")
+
+# Array for missing packages
+MISSING_PACKAGES=()
+
+# Check whether package is install or not
+for package in "${REQUIRED_PACKAGES[@]}"; do
+  if ! dpkg -l | grep -q "^ii  $package[ :]"; then
+    MISSING_PACKAGES+=("$package")
+  fi
+done
+
+# There are some packages not installed
+if [ ${#MISSING_PACKAGES[@]} -ne 0 ]; then
+  echo "Following packages are not installed:"
+  for package in "${MISSING_PACKAGES[@]}"; do
+    echo "$package"
+  done
+  exit 1
+fi
+# all paackages are installed
+
+#
 INSTALLDIR=$PWD/sapporo-install
-EXECUTABLEWORKFLOWSJSON_PATH=${INSTALLDIR}/imputation-desktop/scripts/executable_workflows.json
+EXECUTABLEWORKFLOWSJSON_PATH=${INSTALLDIR}/executable_workflows.json
 RUNSH_PATH=${INSTALLDIR}/imputation-desktop/scripts/run.singularity.sh
 NUXTCONFIGTS_PATH=${INSTALLDIR}/imputation-desktop/scripts/nuxt.config.ts
 PREREGISTEREDSERVICES_PATH=${INSTALLDIR}/imputation-desktop/scripts/preRegisteredServices.json
@@ -22,6 +46,27 @@ if [ ${INSTALLPACKAGE} -eq 1 ]; then
     # pip install cwltool==3.1.20210816212154
 fi
 
+# check jq
+if ! command -v jq &> /dev/null; then
+  echo "jq is not installed. Installing jq..."
+
+  # create ~/bin
+  mkdir -p ~/bin
+
+  # install jq to ~/bin
+  curl -L -o ~/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
+  
+  # add execution permission jq
+  chmod +x ~/bin/jq
+  # export PATH=~/bin:$PATH
+  echo "jq has been installed to ~/bin."
+fi
+
+# add ~/bin to PATH in .bashrc
+if [[ ":$PATH:" != *":$HOME/bin:"* ]]; then
+  echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc
+  echo "Added ~/bin to PATH. Please run 'source ~/.bashrc' or open a new terminal."
+fi
 
 mkdir ${INSTALLDIR}
 chmod 777 ${INSTALLDIR}
@@ -43,13 +88,67 @@ make install
 
 cd ..
 
+# nextflow
+curl -s https://get.nextflow.io | bash
+chmod 755 nextflow
+mkdir ${INSTALLDIR}/nextflow_singularity_cache
+
+# imputation server wf
+git clone https://github.com/ddbj/imputation-server-wf.git
+## TODO: checkout suitable version
+cd imputation-server-wf
+## checkout this version
+git checkout 9c15e7a4676c1a2dd2cf089f8ebe1a137624e8b7
+cd ..
+
+# create executable_workflows.json
+# 9c15e7a4676c1a2dd2cf089f8ebe1a137624e8b7
+BEAGLE_WORKFLOW_URL=$PWD/imputation-server-wf/Workflows/beagle-imputation-scatter-region.cwl
+HIBAG_WORKFLOW_URL=$PWD/imputation-server-wf/Workflows/hla-imputation/filterChrom-runhibag.cwl
+PGSCATALOG_WORKFLOW_URL=$PWD/imputation-server-ui/workflows/nextflow/pgs.nf
+
+if [ ! -f "${EXECUTABLEWORKFLOWSJSON_PATH}" ]; then
+cat <<EOF > ${EXECUTABLEWORKFLOWSJSON_PATH}
+[
+    {
+      "workflow_name": "beagle",
+      "workflow_url": "file://${BEAGLE_WORKFLOW_URL}",
+      "workflow_type": "CWL",
+      "workflow_type_version": "v1.0",
+      "workflow_attachment": []
+    },
+    {
+      "workflow_name": "hibag",
+      "workflow_url": "file://${HIBAG_WORKFLOW_URL}",
+      "workflow_type": "CWL",
+      "workflow_type_version": "v1.0",
+      "workflow_attachment": []
+    },
+        {
+      "workflow_name": "pgs",
+      "workflow_url": "file://${PGSCATALOG_WORKFLOW_URL}",
+      "workflow_type": "Nextflow",
+      "workflow_type_version": "v1.0",
+      "workflow_attachment": []
+    }
+]
+EOF
+fi
 # imputation desktop
 # for settting files
-git clone https://github.com/manabuishii/imputation-desktop.git
+git clone -b add_pgs https://github.com/manabuishii/imputation-desktop.git
 
 # imputation server
-git clone https://github.com/ddbj/imputation-server-ui.git
+git clone https://github.com/manabuishii/imputation-server-ui.git
 cd imputation-server-ui
+## checkout this version
+git checkout 0c9463b4d60fb629fc11a3baa55efac91af59a93
+# create dot env for secret key
+SECRET_KEY=$(tr -cd '[:alnum:][:punct:]' < /dev/urandom | tr -d '\\"`' | tr -d "'" |head -c 20)
+echo "IMPUTATION_SERVER_SECRET_KEY=${SECRET_KEY}" > .env
+# bcftools
+echo "BCFTOOLS_IMAGE_PATH=/usr/local/biotools/b/bcftools:1.21--h8b25389_0" >> .env
+
 ${INSTALLDIR}/python/py397/bin/python3 -m venv venv-imputationserver-web-ui
 source venv-imputationserver-web-ui/bin/activate
 pip install --upgrade pip

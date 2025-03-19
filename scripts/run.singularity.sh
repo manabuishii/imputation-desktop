@@ -38,16 +38,27 @@ function run_cwltool() {
 }
 
 function run_nextflow() {
-  local container="nextflow/nextflow:21.04.3"
-  local cmd_txt=""
-  if [[ $(jq 'select(.outdir) != null' ${wf_params}) ]]; then
-    # It has outdir as params.
-    cmd_txt="docker run -i --rm ${D_SOCK} -v ${run_dir}:${run_dir} -w=${exe_dir} ${container} nextflow -dockerize run ${wf_url} ${wf_engine_params} -params-file ${wf_params} --outdir ${outputs_dir} 1>${stdout} 2>${stderr}"
-  else
-    # It has NOT outdir as params.
-    cmd_txt="docker run -i --rm ${D_SOCK} -v ${run_dir}:${run_dir} -w=${exe_dir} ${container} nextflow -dockerize run ${wf_url} ${wf_engine_params} -params-file ${wf_params} -work-dir ${outputs_dir} 1>${stdout} 2>${stderr}"
-  fi
-  echo ${cmd_txt} >${cmd}
+  #local container="nextflow/nextflow:21.04.3"
+  #local cmd_txt=""
+  #if [[ $(jq 'select(.outdir) != null' ${wf_params}) ]]; then
+  #  # It has outdir as params.
+  #  cmd_txt="docker run -i --rm ${D_SOCK} -v ${run_dir}:${run_dir} -w=${exe_dir} ${container} nextflow -dockerize run ${wf_url} ${wf_engine_params} -params-file ${wf_params} --outdir ${outputs_dir} 1>${stdout} 2>${stderr}"
+  #else
+  #  # It has NOT outdir as params.
+  #  cmd_txt="docker run -i --rm ${D_SOCK} -v ${run_dir}:${run_dir} -w=${exe_dir} ${container} nextflow -dockerize run ${wf_url} ${wf_engine_params} -params-file ${wf_params} -work-dir ${outputs_dir} 1>${stdout} 2>${stderr}"
+  #fi
+  # Currently sapporo run.sh don't have HOME env.
+  # So we need to set HOME env for nextflow.
+  # NEXTFLOW_HOME will be the same HOME directory as the user who runs the sapporo.
+  NEXTFLOW_HOME=$(getent passwd $(id -u) | cut -d: -f6)
+  # Create work directory for nextflow.
+  mkdir  ${outputs_dir}/../nextflow_work
+  # Convert params file to the format that nextflow can read.
+  # Because sapporo save params file as JSON string.
+  mv ${wf_params} ${wf_params}.org
+  cat ${wf_params}.org | sed 's/^"//; s/"$//; s/\\n/\n/g' > ${wf_params}
+  cmd_txt="cd ${outputs_dir}/../nextflow_work ;HOME=${NEXTFLOW_HOME} NXF_SINGULARITY_CACHEDIR=${outputs_dir}/../../../../../nextflow_singularity_cache ${outputs_dir}/../../../../../nextflow run pgscatalog/pgsc_calc -profile singularity ${wf_engine_params} -c ${wf_params} --outdir ${outputs_dir} 1>${stdout} 2>${stderr}"
+  echo ${cmd_txt} >${cmd}  
   eval ${cmd_txt} || executor_error
 }
 
